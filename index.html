@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content= Grade Inquiry System | LEMERY SENIOR HIGHSCHOOL>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Grade Inquiry System | LEMERY SENIOR HIGHSCHOOL</title>
 
@@ -178,7 +179,6 @@ th {
                  alt="LSHS Logo"
                  class="logo">
 
-
             <p class="subtitle">
                 Lemery Senior High School<br>
                 Grade 12 ICT Students
@@ -205,12 +205,13 @@ th {
 
     </section>
 
-
     <!-- STUDENT PASSWORD PAGE -->
     <section id="passwordPage" class="hidden">
 
         <div class="header">
-            <img src="lemery-logo.jpg" alt="LSHS Logo" class="logo">
+           <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
             <h1>STUDENT LOGIN</h1>
             <p class="subtitle">Enter your password.</p>
         </div>
@@ -233,12 +234,11 @@ th {
 
     </section>
 
-
     <!-- TERM PAGE -->
     <section id="termPage" class="hidden">
 
         <div class="header">
-             <img src="picture/LSHS.jpg"
+         <img src="picture/LSHS.jpg"
                  alt="LSHS Logo"
                  class="logo">
             <h1>WELCOME, STUDENT!</h1>
@@ -259,8 +259,7 @@ th {
 
     </section>
 
-
-     <!-- GRADES PAGE -->
+    <!-- GRADES PAGE -->
     <section id="gradesPage" class="hidden">
 
         <div class="header">
@@ -293,7 +292,6 @@ th {
 
     </section>
 
-
     <!-- TEACHER LOGIN PAGE -->
     <section id="teacherLoginPage" class="hidden">
 
@@ -321,7 +319,6 @@ th {
 
     </section>
 
-
     <!-- TEACHER GRADE INPUT PAGE -->
     <section id="teacherPage" class="hidden">
 
@@ -341,26 +338,21 @@ th {
                placeholder="Enter 12-digit LRN">
 
         <label for="teacherTerm">Select Term</label>
-        <select id="teacherTerm">
-            <option>1st Term</option>
-            <option>2nd Term</option>
-            <option>3rd Term</option>
+        <select id="teacherTerm" onchange="updateTeacherSubjects()">
+            <option value="1st Term">1st Term</option>
+            <option value="2nd Term">2nd Term</option>
+            <option value="3rd Term">3rd Term</option>
         </select>
 
         <label for="teacherSubject">Select Subject</label>
-        <select id="teacherSubject">
-            <option>3Is</option>
-            <option>P.E. and Health</option>
-            <option>CPAR</option>
-            <option>UCSP</option>
-            <option>Computer Programming</option>
-        </select>
+        <select id="teacherSubject"></select>
 
         <label for="teacherGrade">Grade</label>
         <input id="teacherGrade"
                type="number"
                min="0"
                max="100"
+               step="any"
                placeholder="Enter grade">
 
         <button onclick="saveGrade()">SAVE GRADE</button>
@@ -377,10 +369,7 @@ th {
 
 </div>
 
-
 <script>
-
-// DEM<script>
 
 // DEMO ACCOUNTS
 const DEMO_LRN = "123456789012";
@@ -391,22 +380,40 @@ const TEACHER_PASSWORD = "teacher123";
 
 let currentLRN = "";
 
-const subjects = [
-    "3Is",
-    "P.E. and Health",
-    "CPAR",
-    "UCSP",
-    "Computer Programming"
-];
+// SUBJECTS PER TERM
+const termSubjects = {
+    "1st Term": [
+        "PR2",
+        "P.E. and Health",
+        "M.I.L",
+        "PerDev",
+        "Computer Programming"
+    ],
 
+    "2nd Term": [
+        "3Is",
+        "P.E. and Health",
+        "CPAR",
+        "UCSP",
+        "Computer Programming"
+    ],
+
+    "3rd Term": [
+        "CSS",
+        "EnTrep",
+        "Work Immersion",
+        "E-TECH",
+        "Computer Programming 2"
+    ]
+};
 
 // SAMPLE GRADES
 const sampleGrades = {
     "1st Term": {
-        "3Is": 90,
+        "PR2": 90,
         "P.E. and Health": 95,
-        "CPAR": 92,
-        "UCSP": 88,
+        "M.I.L": 92,
+        "PerDev": 88,
         "Computer Programming": 94
     },
 
@@ -419,14 +426,13 @@ const sampleGrades = {
     },
 
     "3rd Term": {
-        "3Is": 95,
-        "P.E. and Health": 94,
-        "CPAR": 96,
-        "UCSP": 92,
-        "Computer Programming": 98
+        "CSS": 95,
+        "EnTrep": 94,
+        "Work Immersion": 96,
+        "E-TECH": 92,
+        "Computer Programming 2": 98
     }
 };
-
 
 // SHOW PAGE
 function showPage(pageId) {
@@ -447,7 +453,6 @@ function showPage(pageId) {
     clearMessages();
 }
 
-
 // CLEAR MESSAGES
 function clearMessages() {
     const ids = [
@@ -467,20 +472,31 @@ function clearMessages() {
     });
 }
 
-
 // SHOW MESSAGE
 function showMessage(id, message, type) {
     const element = document.getElementById(id);
-
     element.textContent = message;
     element.className = "message " + type;
 }
 
+// UPDATE SUBJECTS WHEN TERM CHANGES
+function updateTeacherSubjects() {
+    const term = document.getElementById("teacherTerm").value;
+    const subjectBox = document.getElementById("teacherSubject");
+
+    subjectBox.innerHTML = "";
+
+    (termSubjects[term] || []).forEach(function(subject) {
+        const option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        subjectBox.appendChild(option);
+    });
+}
 
 // NEXT BUTTON
 function continueToPassword() {
-    const lrn =
-        document.getElementById("lrnInput").value.trim();
+    const lrn = document.getElementById("lrnInput").value.trim();
 
     if (!/^\d{12}$/.test(lrn)) {
         showMessage(
@@ -492,12 +508,10 @@ function continueToPassword() {
     }
 
     currentLRN = lrn;
-
     document.getElementById("displayLRN").textContent = lrn;
 
     showPage("passwordPage");
 }
-
 
 // STUDENT LOGIN
 function studentLogin() {
@@ -508,9 +522,7 @@ function studentLogin() {
         currentLRN === DEMO_LRN &&
         password === STUDENT_PASSWORD
     ) {
-        document.getElementById("termLRN").textContent =
-            currentLRN;
-
+        document.getElementById("termLRN").textContent = currentLRN;
         document.getElementById("studentPassword").value = "";
 
         showPage("termPage");
@@ -523,24 +535,20 @@ function studentLogin() {
     }
 }
 
-
 // GRADE STORAGE KEY
 function getGradeKey(lrn, term, subject) {
-    return "grade_" + lrn + "" + term + "" + subject;
+    return "grade_" + JSON.stringify([lrn, term, subject]);
 }
-
 
 // DISPLAY GRADES
 function showGrades(term) {
-    document.getElementById("gradesLRN").textContent =
-        currentLRN;
-
-    document.getElementById("selectedTerm").textContent =
-        term;
+    document.getElementById("gradesLRN").textContent = currentLRN;
+    document.getElementById("selectedTerm").textContent = term;
 
     const table = document.getElementById("gradesTable");
-
     table.innerHTML = "";
+
+    const subjects = termSubjects[term] || [];
 
     subjects.forEach(function(subject) {
         const savedGrade = localStorage.getItem(
@@ -553,6 +561,7 @@ function showGrades(term) {
             grade = savedGrade;
         } else if (
             currentLRN === DEMO_LRN &&
+            sampleGrades[term] &&
             sampleGrades[term][subject] !== undefined
         ) {
             grade = sampleGrades[term][subject];
@@ -577,7 +586,8 @@ function showGrades(term) {
 
     showPage("gradesPage");
 }
-  // TEACHER LOGIN
+
+// TEACHER LOGIN
 function teacherLogin() {
     const username =
         document.getElementById("teacherUsername").value.trim();
@@ -602,7 +612,6 @@ function teacherLogin() {
     }
 }
 
-
 // SAVE GRADE
 function saveGrade() {
     const lrn =
@@ -621,6 +630,15 @@ function saveGrade() {
         showMessage(
             "teacherMessage",
             "Enter a valid 12-digit student LRN.",
+            "error"
+        );
+        return;
+    }
+
+    if (!subject || !(termSubjects[term] || []).includes(subject)) {
+        showMessage(
+            "teacherMessage",
+            "Please select a valid subject.",
             "error"
         );
         return;
@@ -650,20 +668,28 @@ function saveGrade() {
         return;
     }
 
-    localStorage.setItem(
-        getGradeKey(lrn, term, subject),
-        String(grade)
-    );
+    try {
+        localStorage.setItem(
+            getGradeKey(lrn, term, subject),
+            String(grade)
+        );
 
-    showMessage(
-        "teacherMessage",
-        "Grade saved successfully!",
-        "success"
-    );
+        showMessage(
+            "teacherMessage",
+            "Grade saved successfully!",
+            "success"
+        );
 
-    document.getElementById("teacherGrade").value = "";
+        document.getElementById("teacherGrade").value = "";
+
+    } catch (error) {
+        showMessage(
+            "teacherMessage",
+            "Unable to save grade in this browser.",
+            "error"
+        );
+    }
 }
-
 
 // BACK TO LRN
 function backToLRN() {
@@ -675,7 +701,6 @@ function backToLRN() {
     showPage("lrnPage");
 }
 
-
 // LOG OUT
 function logout() {
     currentLRN = "";
@@ -685,7 +710,6 @@ function logout() {
 
     showPage("lrnPage");
 }
-
 
 // ENTER KEY SUPPORT
 document.getElementById("lrnInput").addEventListener(
@@ -714,6 +738,9 @@ document.getElementById("teacherPassword").addEventListener(
         }
     }
 );
+
+// LOAD SUBJECTS FOR DEFAULT TERM
+updateTeacherSubjects();
 
 </script>
 
