@@ -1,0 +1,996 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Grade Inquiry System | LEMERY SENIOR HIGHSCHOOL</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8eeee, white, #f5e8c8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    border-top: 7px solid #b30000;
+    box-shadow: 0 8px 25px #0002;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+h1, h2 {
+    color: #a00000;
+    text-align: center;
+}
+
+h1 {
+    font-size: 23px;
+}
+
+.subtitle, .note {
+    color: #666;
+    text-align: center;
+    line-height: 1.5;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #b30000;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #780000;
+}
+
+.secondary {
+    background: white;
+    color: #a00000;
+    border: 1px solid #a00000;
+}
+
+.link {
+    background: white;
+    color: #a00000;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.message {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.error {
+    background: #ffe6e6;
+    color: #990000;
+}
+
+.success {
+    background: #e5f7e9;
+    color: #176b2c;
+}
+
+.info {
+    padding: 12px;
+    background: #fff0f0;
+    border-left: 4px solid #c9a227;
+    margin-bottom: 15px;
+    overflow-wrap: anywhere;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px 6px;
+    font-size: 14px;
+}
+
+th {
+    background: #a00000;
+    color: white;
+}
+
+.grade {
+    text-align: center;
+    font-weight: bold;
+    color: #a00000;
+}
+
+.footer {
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- STUDENT LRN PAGE -->
+    <section id="lrnPage">
+
+        <div class="header">
+            <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>GRADE INQUIRY SYSTEM</h1>
+
+            <p class="subtitle">
+                Lemery Senior High School<br>
+                Grade 12 ICT Students
+            </p>
+        </div>
+
+        <label for="lrnInput">Learner Reference Number (LRN)</label>
+
+        <input id="lrnInput"
+               type="text"
+               maxlength="12"
+               inputmode="numeric"
+               placeholder="Enter your 12-digit LRN">
+
+        <button onclick="continueToPassword()">NEXT</button>
+
+        <button class="secondary" onclick="showPage('signupPage')">
+            CREATE STUDENT ACCOUNT
+        </button>
+
+        <button class="link" onclick="showPage('teacherLoginPage')">
+            Teacher Login
+        </button>
+
+        <div id="lrnMessage"></div>
+
+        <p class="note">
+            Already registered? Enter your LRN to log in.
+        </p>
+
+    </section>
+
+    <!-- STUDENT PASSWORD PAGE -->
+    <section id="passwordPage" class="hidden">
+
+        <div class="header">
+          <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>STUDENT LOGIN</h1>
+            <p class="subtitle">Enter your account password.</p>
+        </div>
+
+        <div class="info">
+            <b>LRN:</b> <span id="displayLRN"></span>
+        </div>
+
+        <label for="studentPassword">Password</label>
+
+        <input id="studentPassword"
+               type="password"
+               placeholder="Enter your password">
+
+        <button onclick="studentLogin()">LOGIN</button>
+
+        <button class="secondary" onclick="backToLRN()">BACK</button>
+
+        <div id="passwordMessage"></div>
+
+    </section>
+
+    <!-- STUDENT SIGN UP PAGE -->
+    <section id="signupPage" class="hidden">
+
+        <div class="header">
+            <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>STUDENT SIGN UP</h1>
+
+            <p class="subtitle">
+                Create your own Grade Inquiry System account.
+            </p>
+        </div>
+
+        <label for="signupLRN">Learner Reference Number (LRN)</label>
+
+        <input id="signupLRN"
+               type="text"
+               maxlength="12"
+               inputmode="numeric"
+               placeholder="Enter your 12-digit LRN">
+
+        <label for="signupPassword">Create Password</label>
+
+        <input id="signupPassword"
+               type="password"
+               placeholder="Create your password">
+
+        <label for="confirmPassword">Confirm Password</label>
+
+        <input id="confirmPassword"
+               type="password"
+               placeholder="Re-enter your password">
+
+        <button onclick="registerStudent()">CREATE ACCOUNT</button>
+
+        <button class="secondary" onclick="showPage('lrnPage')">
+            BACK TO LOGIN
+        </button>
+
+        <div id="signupMessage"></div>
+
+        <p class="note">
+            Use your own LRN and create a password you can remember.
+        </p>
+
+    </section>
+
+    <!-- TERM PAGE -->
+    <section id="termPage" class="hidden">
+
+        <div class="header">
+           <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+            <h1>WELCOME, STUDENT!</h1>
+
+            <p class="subtitle">Select a term to view your grades.</p>
+        </div>
+
+        <div class="info">
+            <b>LRN:</b> <span id="termLRN"></span>
+        </div>
+
+        <h2>Select Term</h2>
+
+        <button onclick="showGrades('1st Term')">1st Term</button>
+        <button onclick="showGrades('2nd Term')">2nd Term</button>
+        <button onclick="showGrades('3rd Term')">3rd Term</button>
+
+        <button class="secondary" onclick="logout()">LOG OUT</button>
+
+    </section>
+
+    <!-- GRADES PAGE -->
+    <section id="gradesPage" class="hidden">
+
+        <div class="header">
+          <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>MY GRADES</h1>
+        </div>
+
+        <div class="info">
+            <b>LRN:</b> <span id="gradesLRN"></span><br>
+            <b>Term:</b> <span id="selectedTerm"></span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+
+            <tbody id="gradesTable"></tbody>
+        </table>
+
+        <button class="secondary" onclick="showPage('termPage')">
+            BACK TO TERMS
+        </button>
+
+        <button onclick="logout()">LOG OUT</button>
+
+    </section>
+
+    <!-- TEACHER LOGIN PAGE -->
+    <section id="teacherLoginPage" class="hidden">
+
+        <div class="header">
+           <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>TEACHER LOGIN</h1>
+
+            <p class="subtitle">Authorized personnel only.</p>
+        </div>
+
+        <label for="teacherUsername">Username</label>
+
+        <input id="teacherUsername"
+               type="text"
+               placeholder="Enter username">
+
+        <label for="teacherPassword">Password</label>
+
+        <input id="teacherPassword"
+               type="password"
+               placeholder="Enter password">
+
+        <button onclick="teacherLogin()">LOGIN</button>
+
+        <button class="secondary" onclick="backToLRN()">BACK</button>
+
+        <div id="teacherLoginMessage"></div>
+
+    </section>
+
+    <!-- TEACHER GRADE INPUT PAGE -->
+    <section id="teacherPage" class="hidden">
+
+        <div class="header">
+           <img src="picture/LSHS.jpg"
+                 alt="LSHS Logo"
+                 class="logo">
+
+            <h1>TEACHER DASHBOARD</h1>
+
+            <p class="subtitle">Grade Management</p>
+        </div>
+
+        <label for="teacherLRN">Student LRN</label>
+
+        <input id="teacherLRN"
+               type="text"
+               maxlength="12"
+               inputmode="numeric"
+               placeholder="Enter 12-digit LRN">
+
+        <label for="teacherTerm">Select Term</label>
+
+        <select id="teacherTerm" onchange="updateTeacherSubjects()">
+            <option value="1st Term">1st Term</option>
+            <option value="2nd Term">2nd Term</option>
+            <option value="3rd Term">3rd Term</option>
+        </select>
+
+        <label for="teacherSubject">Select Subject</label>
+
+        <select id="teacherSubject"></select>
+
+        <label for="teacherGrade">Grade</label>
+
+        <input id="teacherGrade"
+               type="number"
+               min="0"
+               max="100"
+               step="any"
+               placeholder="Enter grade">
+
+        <button onclick="saveGrade()">SAVE GRADE</button>
+
+        <div id="teacherMessage"></div>
+
+        <button class="secondary" onclick="logout()">LOG OUT</button>
+
+    </section>
+
+    <div class="footer">
+        Grade Inquiry System Monitoring Website
+    </div>
+
+</div>
+
+<script>
+
+// DEMO ACCOUNT
+const DEMO_LRN = "123456789012";
+const STUDENT_PASSWORD = "student123";
+
+const TEACHER_USERNAME = "teacher";
+const TEACHER_PASSWORD = "teacher123";
+
+// STORAGE KEYS
+const ACCOUNTS_KEY = "lshs_student_accounts";
+
+let currentLRN = "";
+
+// SUBJECTS PER TERM
+const termSubjects = {
+    "1st Term": [
+        "PR2",
+        "P.E. and Health",
+        "M.I.L",
+        "PerDev",
+        "Computer Programming"
+    ],
+
+    "2nd Term": [
+        "3Is",
+        "P.E. and Health",
+        "CPAR",
+        "UCSP",
+        "Computer Programming"
+    ],
+
+    "3rd Term": [
+        "CSS",
+        "EnTrep",
+        "Work Immersion",
+        "E-TECH",
+        "Computer Programming 2"
+    ]
+};
+
+// SAMPLE GRADES
+const sampleGrades = {
+    "1st Term": {
+        "PR2": 90,
+        "P.E. and Health": 95,
+        "M.I.L": 92,
+        "PerDev": 88,
+        "Computer Programming": 94
+    },
+
+    "2nd Term": {
+        "3Is": 93,
+        "P.E. and Health": 96,
+        "CPAR": 91,
+        "UCSP": 90,
+        "Computer Programming": 97
+    },
+
+    "3rd Term": {
+        "CSS": 95,
+        "EnTrep": 94,
+        "Work Immersion": 96,
+        "E-TECH": 92,
+        "Computer Programming 2": 98
+    }
+};
+
+// GET REGISTERED ACCOUNTS
+function getAccounts() {
+    try {
+        const saved = localStorage.getItem(ACCOUNTS_KEY);
+        const accounts = saved ? JSON.parse(saved) : {};
+
+        if (
+            accounts &&
+            typeof accounts === "object" &&
+            !Array.isArray(accounts)
+        ) {
+            return accounts;
+        }
+
+        return {};
+    } catch (error) {
+        return {};
+    }
+}
+
+// SAVE REGISTERED ACCOUNTS
+function saveAccounts(accounts) {
+    try {
+        localStorage.setItem(
+            ACCOUNTS_KEY,
+            JSON.stringify(accounts)
+        );
+
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+// SHOW PAGE
+function showPage(pageId) {
+    const pages = [
+        "lrnPage",
+        "passwordPage",
+        "signupPage",
+        "termPage",
+        "gradesPage",
+        "teacherLoginPage",
+        "teacherPage"
+    ];
+
+    pages.forEach(function(id) {
+        document.getElementById(id).classList.add("hidden");
+    });
+
+    document.getElementById(pageId).classList.remove("hidden");
+
+    clearMessages();
+}
+
+// CLEAR MESSAGES
+function clearMessages() {
+    const ids = [
+        "lrnMessage",
+        "passwordMessage",
+        "signupMessage",
+        "teacherLoginMessage",
+        "teacherMessage"
+    ];
+
+    ids.forEach(function(id) {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = "";
+            element.className = "";
+        }
+    });
+}
+
+// SHOW MESSAGE
+function showMessage(id, message, type) {
+    const element = document.getElementById(id);
+
+    element.textContent = message;
+    element.className = "message " + type;
+}
+
+// STUDENT REGISTRATION
+function registerStudent() {
+    const lrn = document.getElementById("signupLRN").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    // CHECK LRN
+    if (!/^\d{12}$/.test(lrn)) {
+        showMessage(
+            "signupMessage",
+            "Please enter a valid 12-digit LRN.",
+            "error"
+        );
+        return;
+    }
+
+    // CHECK PASSWORD
+    if (password.length < 6) {
+        showMessage(
+            "signupMessage",
+            "Password must contain at least 6 characters.",
+            "error"
+        );
+        return;
+    }
+
+    // CONFIRM PASSWORD
+    if (password !== confirmPassword) {
+        showMessage(
+            "signupMessage",
+            "Passwords do not match.",
+            "error"
+        );
+        return;
+    }
+
+    // GET EXISTING ACCOUNTS
+    const accounts = getAccounts();
+
+    // PREVENT DUPLICATE REGISTRATION
+    if (Object.prototype.hasOwnProperty.call(accounts, lrn)) {
+        showMessage(
+            "signupMessage",
+            "An account with this LRN already exists. Please log in.",
+            "error"
+        );
+        return;
+    }
+
+    // CREATE ACCOUNT
+    accounts[lrn] = {
+        password: password
+    };
+
+    // SAVE ACCOUNT
+    if (!saveAccounts(accounts)) {
+        showMessage(
+            "signupMessage",
+            "Unable to create account. Browser storage may be unavailable.",
+            "error"
+        );
+        return;
+    }
+
+    // CLEAR REGISTRATION FIELDS
+    document.getElementById("signupLRN").value = "";
+    document.getElementById("signupPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+
+    // SHOW SUCCESS MESSAGE
+    showMessage(
+        "signupMessage",
+        "Account created successfully! You can now log in.",
+        "success"
+    );
+}
+
+// UPDATE SUBJECTS WHEN TERM CHANGES
+function updateTeacherSubjects() {
+    const term = document.getElementById("teacherTerm").value;
+
+    const subjectBox = document.getElementById("teacherSubject");
+
+    subjectBox.innerHTML = "";
+
+    (termSubjects[term] || []).forEach(function(subject) {
+        const option = document.createElement("option");
+
+        option.value = subject;
+        option.textContent = subject;
+
+        subjectBox.appendChild(option);
+    });
+}
+
+// NEXT BUTTON
+function continueToPassword() {
+    const lrn = document.getElementById("lrnInput").value.trim();
+
+    if (!/^\d{12}$/.test(lrn)) {
+        showMessage(
+            "lrnMessage",
+            "Please enter a valid 12-digit LRN.",
+            "error"
+        );
+        return;
+    }
+
+    currentLRN = lrn;
+
+    document.getElementById("displayLRN").textContent = lrn;
+    document.getElementById("studentPassword").value = "";
+
+    showPage("passwordPage");
+}
+
+// STUDENT LOGIN
+function studentLogin() {
+    const password =
+        document.getElementById("studentPassword").value;
+
+    const accounts = getAccounts();
+
+    const hasRegisteredAccount =
+        Object.prototype.hasOwnProperty.call(accounts, currentLRN);
+
+    let loginSuccess = false;
+
+    // CHECK REGISTERED STUDENT ACCOUNT
+    if (hasRegisteredAccount) {
+        loginSuccess =
+            accounts[currentLRN].password === password;
+    }
+
+    // KEEP THE ORIGINAL DEMO ACCOUNT WORKING
+    else if (currentLRN === DEMO_LRN) {
+        loginSuccess = password === STUDENT_PASSWORD;
+    }
+
+    if (loginSuccess) {
+        document.getElementById("termLRN").textContent = currentLRN;
+
+        document.getElementById("studentPassword").value = "";
+
+        showPage("termPage");
+    } else {
+        showMessage(
+            "passwordMessage",
+            "Incorrect LRN or password. Please try again.",
+            "error"
+        );
+    }
+}
+
+// GRADE STORAGE KEY
+function getGradeKey(lrn, term, subject) {
+    return "grade_" + JSON.stringify([lrn, term, subject]);
+}
+
+// DISPLAY GRADES
+function showGrades(term) {
+    document.getElementById("gradesLRN").textContent = currentLRN;
+
+    document.getElementById("selectedTerm").textContent = term;
+
+    const table = document.getElementById("gradesTable");
+
+    table.innerHTML = "";
+
+    const subjects = termSubjects[term] || [];
+
+    subjects.forEach(function(subject) {
+        const savedGrade = localStorage.getItem(
+            getGradeKey(currentLRN, term, subject)
+        );
+
+        let grade;
+
+        if (savedGrade !== null) {
+            grade = savedGrade;
+        } else if (
+            currentLRN === DEMO_LRN &&
+            sampleGrades[term] &&
+            sampleGrades[term][subject] !== undefined
+        ) {
+            grade = sampleGrades[term][subject];
+        } else {
+            grade = "Not yet available";
+        }
+
+        const row = document.createElement("tr");
+
+        const subjectCell = document.createElement("td");
+        subjectCell.textContent = subject;
+
+        const gradeCell = document.createElement("td");
+        gradeCell.textContent = grade;
+        gradeCell.className = "grade";
+
+        row.appendChild(subjectCell);
+        row.appendChild(gradeCell);
+
+        table.appendChild(row);
+    });
+
+    showPage("gradesPage");
+}
+
+// TEACHER LOGIN
+function teacherLogin() {
+    const username =
+        document.getElementById("teacherUsername").value.trim();
+
+    const password =
+        document.getElementById("teacherPassword").value;
+
+    if (
+        username === TEACHER_USERNAME &&
+        password === TEACHER_PASSWORD
+    ) {
+        document.getElementById("teacherUsername").value = "";
+        document.getElementById("teacherPassword").value = "";
+
+        showPage("teacherPage");
+    } else {
+        showMessage(
+            "teacherLoginMessage",
+            "Incorrect teacher username or password.",
+            "error"
+        );
+    }
+}
+
+// SAVE GRADE
+function saveGrade() {
+    const lrn =
+        document.getElementById("teacherLRN").value.trim();
+
+    const term =
+        document.getElementById("teacherTerm").value;
+
+    const subject =
+        document.getElementById("teacherSubject").value;
+
+    const input =
+        document.getElementById("teacherGrade").value.trim();
+
+    if (!/^\d{12}$/.test(lrn)) {
+        showMessage(
+            "teacherMessage",
+            "Enter a valid 12-digit student LRN.",
+            "error"
+        );
+        return;
+    }
+
+    if (!subject || !(termSubjects[term] || []).includes(subject)) {
+        showMessage(
+            "teacherMessage",
+            "Please select a valid subject.",
+            "error"
+        );
+        return;
+    }
+
+    if (input === "") {
+        showMessage(
+            "teacherMessage",
+            "Please enter a grade.",
+            "error"
+        );
+        return;
+    }
+
+    const grade = Number(input);
+
+    if (
+        !Number.isFinite(grade) ||
+        grade < 0 ||
+        grade > 100
+    ) {
+        showMessage(
+            "teacherMessage",
+            "Grade must be between 0 and 100.",
+            "error"
+        );
+        return;
+    }
+
+    try {
+        localStorage.setItem(
+            getGradeKey(lrn, term, subject),
+            String(grade)
+        );
+
+        showMessage(
+            "teacherMessage",
+            "Grade saved successfully!",
+            "success"
+        );
+
+        document.getElementById("teacherGrade").value = "";
+
+    } catch (error) {
+        showMessage(
+            "teacherMessage",
+            "Unable to save grade in this browser.",
+            "error"
+        );
+    }
+}
+
+// BACK TO LRN
+function backToLRN() {
+    currentLRN = "";
+
+    document.getElementById("lrnInput").value = "";
+    document.getElementById("studentPassword").value = "";
+
+    showPage("lrnPage");
+}
+
+// LOG OUT
+function logout() {
+    currentLRN = "";
+
+    document.getElementById("lrnInput").value = "";
+    document.getElementById("studentPassword").value = "";
+
+    document.getElementById("teacherLRN").value = "";
+    document.getElementById("teacherGrade").value = "";
+
+    showPage("lrnPage");
+}
+
+// ENTER KEY SUPPORT
+document.getElementById("lrnInput").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            continueToPassword();
+        }
+    }
+);
+
+document.getElementById("studentPassword").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            studentLogin();
+        }
+    }
+);
+
+document.getElementById("signupLRN").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            registerStudent();
+        }
+    }
+);
+
+document.getElementById("signupPassword").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            registerStudent();
+        }
+    }
+);
+
+document.getElementById("confirmPassword").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            registerStudent();
+        }
+    }
+);
+
+document.getElementById("teacherPassword").addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            teacherLogin();
+        }
+    }
+);
+
+// LOAD SUBJECTS FOR DEFAULT TERM
+updateTeacherSubjects();
+
+</script>
+
+</body>
+</html>
